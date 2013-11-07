@@ -10,7 +10,7 @@ function show_avatars_list($av_id) {
  
  //потом отображаем данные
  ?> 
- <SELECT NAME="avatars_list"> 
+ <SELECT NAME="chosen_avatars">
   <?php 
     foreach($arr as $farr) {
   ?>
@@ -56,13 +56,35 @@ function show_items_list($oper_av_id, $owner_av_id) {
  
     foreach($arr as $farr) {
   ?>
-    <INPUT NAME="items_list[]" TYPE="checkbox" value="<?php echo $farr["it_id"]; ?>"><?php echo $farr["it_name"]." feat: ".$farr["special_feature"];?></INPUT>
+    <BR/><INPUT NAME="chosen_items[]" TYPE="checkbox" value="<?php echo $farr["it_id"]; ?>"><?php echo $farr["it_name"].(isset($farr["special_feature"])&&$farr["special_feature"]!=""?" со спец.свойством".$farr["special_feature"]:"...");?></INPUT>
+
   <?php 
     }
   ?>
  </SELECT>
  <?php 
  }
- 
+
+ function form_start($formname, $av_id) {
+   ?>
+  <FORM METHOD="GET">
+    <INPUT TYPE="HIDDEN" NAME="op_id" VALUE="<?php echo $av_id; ?>">
+   <?php
+ }
+
+ function form_end($formname) {
+   ?>
+
+    <br/><INPUT TYPE="SUBMIT" VALUE="<?php echo $formname; ?>">
+  </FORM>
+   <?php
+ }
+
+ function show_textarea() {
+   ?>
+    <TEXTAREA NAME="bigtext" COLS="20" ROWS="5"></TEXTAREA NAME="bigtext">
+   <?php
+ }
+
   
 ?>
