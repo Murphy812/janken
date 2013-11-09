@@ -10,7 +10,7 @@ function show_avatars_list($av_id) {
  
  //потом отображаем данные
  ?> 
- <SELECT NAME="chosen_avatars">
+ <SELECT NAME="who">
   <?php 
     foreach($arr as $farr) {
   ?>
@@ -30,15 +30,14 @@ function show_avatars_list($av_id) {
    
    if($arr = get_avatar_desc($av_id)[0]) {
    
+   echo "<div style=\"font-size: 200%; color: red\">".$arr['av_name'].", Str: ".$arr["strength"].", ".$arr["sign_alter_name"]."<br/>\n";
    echo "<IMG SRC=\"img/sakura_$av_id.jpg\" width=\"250\" height=\"500\">\n";
-   
-   echo "<div>".$arr['av_name'].", Str: ".$arr["strength"].", ".$arr["sign_alter_name"]."\n";
    ?>
-     <FORM class="logout" ACTION="<?php echo current_page(); ?>" METHOD="POST";
+     <FORM class="logout" ACTION="<?php echo current_page(); ?>" METHOD="POST">
     <input type="hidden" name="action" value="logout">
     <input value="Exit" type="submit">
      </FORM>
-     <FORM class="change_pin" ACTION="<?php echo current_page(); ?>" METHOD="GET">
+     <FORM class="change_pin" ACTION="<?php echo current_page(); ?>" METHOD="POST">
      <input type="hidden" name="form" value="change_pin">
      <input value="Change password" type="submit">
      </FORM>
@@ -56,7 +55,7 @@ function show_items_list($oper_av_id, $owner_av_id) {
  
     foreach($arr as $farr) {
   ?>
-    <BR/><INPUT NAME="chosen_items[]" TYPE="checkbox" value="<?php echo $farr["it_id"]; ?>"><?php echo $farr["it_name"].(isset($farr["special_feature"])&&$farr["special_feature"]!=""?" со спец.свойством".$farr["special_feature"]:"...");?></INPUT>
+    <BR/><INPUT NAME="items[]" TYPE="checkbox" value="<?php echo $farr["it_id"]; ?>"><?php echo $farr["it_name"].(isset($farr["special_feature"])&&$farr["special_feature"]!=""?" со спец.свойством".$farr["special_feature"]:"...");?></INPUT>
 
   <?php 
     }
@@ -67,8 +66,8 @@ function show_items_list($oper_av_id, $owner_av_id) {
 
  function form_start($formname, $av_id) {
    ?>
-  <FORM METHOD="GET">
-    <INPUT TYPE="HIDDEN" NAME="op_id" VALUE="<?php echo $av_id; ?>">
+  <FORM METHOD="POST">
+    <INPUT TYPE="HIDDEN" NAME="action" VALUE="<?php echo $formname;?>">
    <?php
  }
 
@@ -84,6 +83,23 @@ function show_items_list($oper_av_id, $owner_av_id) {
    ?>
     <TEXTAREA NAME="bigtext" COLS="20" ROWS="5"></TEXTAREA NAME="bigtext">
    <?php
+ }
+
+
+function show_messages_list($oper_av_id) {
+ 
+ //вначале вызываем функцию, которая достанет эти данные из базы.
+ $arr = get_messages_list($oper_av_id);
+
+    foreach($arr as $farr) {
+  ?>
+    <div style="color: <?php echo ($farr["frm"]=='me')?"green": "red"; ?>"><?php echo $farr["opdate"]; ?> - <?php echo $farr["av_name"]; ?>: <?php echo $farr["msg_text"];?></div>
+
+  <?php 
+    }
+  ?>
+ </SELECT>
+ <?php 
  }
 
   

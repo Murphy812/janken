@@ -18,6 +18,7 @@
  include_once("layer_wrap.inc");
  
  include_once("pin.inc");			// смена PIN
+ include_once("send.inc");
  include_once("battle.inc");		// битва
  
 
@@ -36,6 +37,9 @@
      case "change_pin":
        change_pin($av_id,$_POST["oldpin"],$_POST["newpin"]);
        break;	   
+     case "send":
+       send($av_id,$_POST["who"],$_POST["items"],$_POST["bigtext"]);
+       break;    
    }  
 
    //если задано подтверждение - запрашиваем его
@@ -49,9 +53,6 @@
    //пытаемся вывести заданную форму
    $pform = isset($_POST["form"])?$_POST["form"]:"";
    switch ($pform) {
-     case "top_rating"://выводим топ рейтинга
-       top_rating(10);
-       break;	
      case "change_pin"://выводим форму смены PIN
        form_change_pin($av_id);
        break; 
@@ -60,6 +61,10 @@
    //всегда безусловно(?может быть, краткая и полная форма?) выводим данные оператора
    show_avatar_desc($av_id);
 
+   echo "Сообщения:<br/>";
+   show_messages_list($av_id);
+
+
    //тут нужен заголовок формы отправки. стандартные поля про оператора. Потом список предметов, которые можно чекнуть, и поле для ввода сообщения
    form_start("send", $av_id);
    echo "Адресат:<br/>";
@@ -67,12 +72,9 @@
   
    echo "<br/><br/>Выбрать подарок:<br/>";
    show_items_list($av_id, $av_id);
-   show_items_list($av_id, $av_id);
-   //предметы нужно не просто выводить, а быть готовым
 
    echo "<br/><br/>Ввести сообщение:<br/>";
    show_textarea();
-
 
    //тут нужно окончание формы отправки
    form_end("send");
@@ -81,6 +83,7 @@
    print_r($_POST);
 
    //еще нужно показывать ленту статусов - пока нет такой функции. И даже поля такого нет. Для каждого аватара - статус. И нужно выводить непустые статусы.
+   //да не надо ленту статусов. Просто изменения статусов расходятся каждому в личку. А они меняются у шутов и шутами.
    
    
    ?>

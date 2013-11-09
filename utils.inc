@@ -160,7 +160,7 @@
 
  //выходим из системы (убиваем куку)
  function logout() {
-   setcookie("subs_id", false, 0);
+   setcookie("av_id", false, 0);
    header("Location: ".current_page()); 
  }//logout
  
