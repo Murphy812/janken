@@ -1,5 +1,7 @@
 <?php
 
+ $spath;
+
  function push_headers() {
    header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
    header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
@@ -20,19 +22,24 @@
 
  //с помощью этой функции мы перезагружаем страницу
  function current_page() {
+/*
    global $spath;
    if (!isset($spath)) {
     $path = $_SERVER['PHP_SELF'];
     $spath = substr($path, 1+strrpos ($path, '/'));
    }
    return $spath;
+*/   
+   $path = $_SERVER['PHP_SELF'];
+   return substr($path, 1+strrpos ($path, '/'));
+
  }  
 
  
  function to_main_page() {
    if(!headers_sent())
      push_headers();
-   print "<BR/>Спасибо, что пользуетесь нашими услугами. <A HREF='".current_page()."'>Обратно на главную форму</A><BR/></BODY>";
+   print "<BR/>Достойный муж ведет себя достойно. <A HREF='".current_page()."'>Вернуться к истокам</A><BR/></BODY>";
  }
 
  //безопасный вывод сообщений с возможной смертью в конце

@@ -1,4 +1,6 @@
 ﻿<?php
+  $link;
+  
   function make_link () {
      global $link;
      require 'config.inc';

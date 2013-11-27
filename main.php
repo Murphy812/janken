@@ -1,7 +1,4 @@
 <?php
- $link;
- $spath;
- $version = "2013104.1";
  
  $dev = "";//"_mur";
  
@@ -23,6 +20,7 @@
  
 
  function main() {   
+ $version = "2013104.1";
  
  $varr = log_call(); 
     
@@ -38,7 +36,10 @@
        change_pin($av_id,$_POST["oldpin"],$_POST["newpin"]);
        break;	   
      case "send":
-       send($av_id,$_POST["who"],$_POST["items"],$_POST["bigtext"]);
+       $who = (isset($_POST["who"])?$_POST["who"]:"nobody");
+       $items = (isset($_POST["items"])?$_POST["items"]:array());
+       $msg = (isset($_POST["bigtext"])?$_POST["bigtext"]:"");
+       send($av_id,$who,$items,$msg);
        break;    
    }  
 
@@ -58,6 +59,9 @@
        break; 
    }   
 
+
+   page_start($version);
+
    //всегда безусловно(?может быть, краткая и полная форма?) выводим данные оператора
    show_avatar_desc($av_id);
 
@@ -67,16 +71,19 @@
 
    //тут нужен заголовок формы отправки. стандартные поля про оператора. Потом список предметов, которые можно чекнуть, и поле для ввода сообщения
    form_start("send", $av_id);
-   echo "Адресат:<br/>";
-   show_avatars_list($av_id);
+     echo "Отправить благородному соученику:<br/>";
+     show_avatars_list($av_id);
+
+     echo "<br/><br/>удар стихией:<br/>";
+     show_signs_list();
   
-   echo "<br/><br/>Выбрать подарок:<br/>";
-   show_items_list($av_id, $av_id);
+     echo "<br/><br/>дар:<br/>";
+     show_items_list($av_id, $av_id);
 
-   echo "<br/><br/>Ввести сообщение:<br/>";
-   show_textarea();
+     echo "<br/><br/>послание:<br/>";
+     show_textarea();
 
-   //тут нужно окончание формы отправки
+   //окончание формы отправки
    form_end("send");
 
    print_r($_GET);
@@ -86,14 +93,7 @@
    //да не надо ленту статусов. Просто изменения статусов расходятся каждому в личку. А они меняются у шутов и шутами.
    
    
-   ?>
-
-   <BR/>
-    <DIV class="block">
-   <?php
-
-   echo "</DIV>";
-   
+   page_end();
    to_main_page(0);
  } 
 

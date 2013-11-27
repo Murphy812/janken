@@ -4,11 +4,8 @@
  //сообщение нужно вставить в табличку
  //у предмета нужно поменять привязку
  function send($av_id, $rcv_id, $items, $msg) {
-   $query = "INSERT INTO messages (msg_text, opdate, my_av_id, his_av_id) VALUES ('$msg', now(), $av_id, $rcv_id)";
-   //say("$query<BR/>", 1);
-   $res = make_query($query);
-   //$array = mysql_fetch_assoc($res);
-	 //
+   if (isset($msg)&&$msg!="")
+     $res = make_query("INSERT INTO messages (msg_text, opdate, my_av_id, his_av_id) VALUES ('$msg', now(), $av_id, $rcv_id)");
 
    //для каждого передаваемого предмета - убиваем старую связь, создаем новую
    foreach($items as $item) {
