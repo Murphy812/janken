@@ -39,7 +39,8 @@
        $who = (isset($_POST["who"])?$_POST["who"]:"nobody");
        $items = (isset($_POST["items"])?$_POST["items"]:array());
        $msg = (isset($_POST["bigtext"])?$_POST["bigtext"]:"");
-       send($av_id,$who,$items,$msg);
+       $sign = (isset($_POST["sign"])?$_POST["sign"]:-1);
+       send($av_id,$who,$items,$msg, $sign);
        break;    
    }  
 
@@ -74,7 +75,7 @@
      echo "Отправить благородному соученику:<br/>";
      show_avatars_list($av_id);
 
-     echo "<br/><br/>удар стихией:<br/>";
+     echo "<br/><br/>Дзянкэн:<br/>";
      show_signs_list();
   
      echo "<br/><br/>дар:<br/>";

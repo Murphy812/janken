@@ -37,10 +37,11 @@ function show_avatar_desc($av_id) {
 function show_signs_list() {
  ?> 
  <SELECT NAME="sign">
+   <option value="-1">не нападать</option>
   <?php 
     foreach(get_signs_list() as $farr) {
   ?>
-    <option value="<?php echo $farr["sign_id"]; ?>"><?php echo $farr["sign_name"];?></option>
+    <option value="<?php echo $farr["sign_id"]; ?>">ударить стихией <?php echo $farr["sign_name"];?></option>
   <?php 
     }
   ?>
