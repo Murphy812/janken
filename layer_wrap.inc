@@ -6,7 +6,7 @@ function show_avatars_list($av_id) {
   <?php 
     foreach(get_avatars_list($av_id) as $farr) {
   ?>
-    <option value="<?php echo $farr["av_id"]; ?>"><?php echo $farr["av_name"]." str: ".$farr["strength"];?></option>
+    <option value="<?php echo $farr["av_id"]; ?>"><?php echo $farr["av_name"]." побед: ".$farr["strength"];?></option>
   <?php 
     }
   ?>

@@ -22,7 +22,7 @@
     return $result;
  }
 
- //это просто обертка для обращения к базе
+ //архив с данными из запроса
  function array_from_query($query) {
     global $link;
     if (!isset($link)) {
@@ -38,6 +38,12 @@
     return $res_array;
  }
  
+
+ //первое значение из запроса
+ function val_from_query($query) {
+    return array_from_query($query)[0][0];
+ }
+
  
  
  function fetch_value($query){
