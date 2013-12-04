@@ -63,7 +63,7 @@ function show_items_list($oper_av_id, $owner_av_id) {
 function show_messages_list($oper_av_id) {
   foreach(get_messages_list($oper_av_id) as $farr) {
   ?>
-    <div style="color: <?php echo ($farr["frm"]=='me')?"green": "red"; ?>"><?php echo $farr["opdate"]; ?> - <?php echo $farr["av_name"]; ?>: <?php echo $farr["msg_text"];?></div>
+    <div style="color: <?php echo ($farr["frm"]=='me')?"green": "red"; ?>"><?php echo $farr["opdate"]." ".($farr["frm"]=='me'?"слушал:": "говорил:")." ".$farr["av_name"].": ".$farr["msg_text"];?></div>
 
   <?php 
   }
@@ -100,19 +100,31 @@ function form_start($formname, $av_id) {
    <?php
  }
 
- function wins_cases ($num) {
+
+ function cases ($num) {
    $num = $num % 100;
    if ($num > 4 && $num <21)
-     return "побед";
+     return 5;
 
    $num = $num % 10;
    if ($num==1)
-     return "победа";
+     return 1;
    if ($num==0 || $num > 4)
-     return "побед";
+     return 5;
    else
-     return "победы";
-
+     return 3;
  }
+
+
+ function wins_cases ($num) {
+   $wins_cases = array(1=>"победа", 3=>"победы", 5=>"побед");
+   return $wins_cases[cases($num)];
+ }
+
+ function hits_cases ($num) {
+   $hits_cases = array(1=>"удар", 3=>"удара", 5=>"ударов");
+   return $hits_cases[cases($num)];
+ }
+
   
 ?>

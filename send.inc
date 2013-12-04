@@ -22,15 +22,15 @@
        $btl_id=$barr[0][0];
        $uke_health = $barr[0][1];
        $nage_health = $barr[0][2];
-       echo "С этим противником ведется бой №$btl_id, продолжаем";
+       //echo "С этим противником ведется бой №$btl_id, продолжаем";
      }
      else {//проверяем, можно ли создавать бой, и если да, то да
        //проверяем количество нападений на этого наге. Если больше одного боя, то нет!
-       if(1<val_from_query("select count(*) as c1 from battles b where b.uke_id=$rcv_id and b.nage_id=$av_id"))
+       if(2<val_from_query("select count(*) as c1 from battles b where b.uke_id=$rcv_id and b.nage_id=$av_id"))
          echo "Противник отказывается принять бой";
        else {
          $btl_id = val_from_query("select ifnull(max(btl_id)+1, 1) from battles");
-         echo "с этим противником нет актуального боя, надо начать бой№$btl_id";
+         //echo "с этим противником нет актуального боя, надо начать бой№$btl_id";
          //считаем взвешенные хиты для участников, создаем такой бой
          $hits = norm_hits(count(get_items_list($av_id, $av_id)), count(get_items_list($av_id, $rcv_id)));
          $uke_health = $hits[0];
@@ -38,12 +38,12 @@
          //echo "<BR/>Ваши хиты: ".$hits[0]." ".wins_cases($hits[0]).", хиты противника: ".$hits[1]." ".wins_cases($hits[1]);
          $res = make_query("INSERT INTO battles (btl_id, uke_id, nage_id, uke_health, nage_health, winner_id, start_date, end_date) "
                            ." VALUES ($btl_id, $av_id, $rcv_id, $uke_health, $nage_health, null, now(), null)");
-
        }
-
      }
      //тут бой уже точно есть - или нашли, или создали. Надо генерить знак противника, считать результат и тд.
-     $nage_sign = get_nage_sign($btl_id);
+     $nage_sign = get_nage_sign($btl_id, $rcv_id);
+     $res = make_query("INSERT INTO attacks (bt_bt_id, av1_sign_id, av2_sign_id, op_av_id, op_date) VALUES ($btl_id, $sign, $nage_sign, $av_id, now())");
+
      $sign_lib = get_signs_list();
      $msg1 = $sign_lib[$sign];
      //тут надо вычислить, кто кого победил
@@ -53,11 +53,13 @@
          $msg1.= " сильнее, чем ";
          $msg2 = get_win_msg();
          $nage_health-=1;
+         $msg3 = "Противник уже шатается, но сможет выдержать еще $nage_health ".hits_cases($nage_health);
          break;
        case -1:
          $msg1.= " слабее, чем  ";
          $msg2 = get_loose_msg();
          $uke_health-=1;
+         $msg3 = "Вы чувствуете слабость, но на $uke_health ".hits_cases($uke_health)." вас еще хватит";
          break;
        case 0:
          $msg1.= " и ";
@@ -70,24 +72,36 @@
          break;
      }
      $msg1.=$sign_lib[$nage_sign]." противника";
-
-
-     //если хиты у кого-то кончились, то надо в обновлении боя вписать победителя и закрыть дату
-     $winner = null;
-     if($uke_health==0) {
-        //то бой закончился. И если второй не 0, то он победил
-     }
-
-     $res = make_query("UPDATE battles set uke_health=$uke_health, nage_health=$nage_health"
-                           ."where btl_id=$btl_id");
-
-
      echo "<BR/>$msg1. $msg2<BR/>";
 
-     //в зависимости от этого у нас происходит потеря хитов. это фиксируется:
-     //- в battles - уменьшаем остаток хитов
-     //- в actions - записываем атаку и результат
+     //если хиты у кого-то кончились, то надо в обновлении боя вписать победителя и закрыть дату
+     $end_date = "null";
+     $winner_id = "null";
 
+     if($uke_health==0 || $nage_health==0) { //то бой закончился
+        $end_date = "now()";
+        //если у кого-то из них остались хиты - он победил
+        if($uke_health!=0) {
+          $winner_id = $av_id;
+          echo "<BR/>Победа! Вы кланяетесь противнику и благодарите его за поединок";
+        }
+        else
+          if ($nage_health!=0) {
+            $winner_id = $rcv_id;
+            echo "<BR/>Ваш противник кланяется и благодарит вас за поединок. Сгладит ли это горечь поражения?";
+          }
+          else {
+            echo "<BR/>Вы оказались достойны друг друга и не смогли выявить победителя";
+          }
+        $res = make_query("UPDATE avatars set strength=strength+1 where av_id=$winner_id");//накручиваем балл победителю
+     }
+     else {
+       echo "<BR/>$msg3<BR/>";
+
+     }
+
+     $res = make_query("UPDATE battles set uke_health=$uke_health, nage_health=$nage_health, winner_id=$winner_id, end_date=$end_date"
+                           ." where btl_id=$btl_id");
    }//знака нет
 
  }//send
@@ -123,8 +137,11 @@
      return (array($heavy, 1));
  }
   
- function get_nage_sign($btl_id) {
-   return rand(1, 1000) % 5 +1;//пока так, а потом если что добавим подлой логики
+ function get_nage_sign($btl_id, $nage_id) {
+   if($nage_id==50) //это хак для отладки - нападаем на толстое дерево
+     return 3;
+   else
+     return rand(1, 1000) % 5 +1;//пока так, а потом если что добавим подлой логики
  }
 
 

@@ -3,7 +3,7 @@
 function get_avatars_list($av_id) {
   //- добавить учет внешних фильтров - имя, локация
   //- добавить тайных пользователей, которые ему писали
-  return array_from_query("select av_id, av_name, strength from avatars");// where av_id<>'.$av_id.' and sign_sign_id=2');
+  return array_from_query("select av_id, av_name, strength from avatars where av_id<>$av_id");// where av_id<>'.$av_id.' and sign_sign_id=2');
 }
 
  //вывод данных по пользователю - показывается всегда
@@ -29,7 +29,7 @@ function get_avatars_list($av_id) {
 
 function get_messages_list($oper_av_id) {
   return array_from_query("select frm, av_name, msg_text, opdate from "
-                             ."(select 'me' as frm, a.av_name, m.msg_text, m.opdate from messages m, avatars a where a.av_id=m.my_av_id and my_av_id=$oper_av_id"
+                             ."(select 'me' as frm, a.av_name, m.msg_text, m.opdate from messages m, avatars a where a.av_id=m.his_av_id and m.my_av_id=$oper_av_id"
                              ." union "
                              ."select 'him' as frm, a.av_name, m.msg_text, m.opdate from messages m, avatars a where a.av_id=m.my_av_id and m.his_av_id=$oper_av_id"
                              .") q order by q.opdate desc");
