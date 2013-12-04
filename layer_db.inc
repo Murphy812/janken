@@ -13,7 +13,11 @@ function get_avatars_list($av_id) {
 
 
  function get_signs_list() {
-  return array_from_query("select sign_id, sign_name from signs order by 1");
+//  return array_from_query("select sign_id, sign_name from signs order by 1");
+   $res_arr = array();
+   foreach (array_from_query("select sign_id, sign_name from signs order by 1") as $arem)
+     $res_arr[$arem[0]] = $arem[1];
+   return $res_arr;
 }
 
 
