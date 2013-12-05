@@ -63,17 +63,12 @@
 
    page_start($version);
 
-   //всегда безусловно(?может быть, краткая и полная форма?) выводим данные оператора
-   show_avatar_desc($av_id);
-
-   echo "Сообщения:<br/>";
-   show_messages_list($av_id);
-
 
    //тут нужен заголовок формы отправки. стандартные поля про оператора. Потом список предметов, которые можно чекнуть, и поле для ввода сообщения
    form_start("send", $av_id);
-     echo "Выберите благородного соученика ";
-     show_avatars_list($av_id);
+     echo "<BR/>Выберите благородного соученика<BR/>";
+     $rvc_id;
+     show_avatars_list($av_id, isset($who)?$who:$av_id);
 
      echo " чтобы<br/>";
      show_signs_list();
@@ -86,6 +81,13 @@
 
    //окончание формы отправки
    form_end("send");
+
+
+   //всегда безусловно(?может быть, краткая и полная форма?) выводим данные оператора
+   show_avatar_desc($av_id);
+
+   echo "Сообщения:<br/>";
+   show_messages_list($av_id);
 
    //print_r($_GET);
    //print_r($_POST);

@@ -1,12 +1,12 @@
 <?php 
 
-function show_avatars_list($av_id) {
+function show_avatars_list($av_id, $selected_id) {
   ?> 
  <SELECT NAME="who">
   <?php 
     foreach(get_avatars_list($av_id) as $farr) {
   ?>
-    <option value="<?php echo $farr["av_id"]; ?>"><?php echo $farr["av_name"].", ".$farr["strength"]." ".wins_cases($farr["strength"]);?></option>
+    <option value="<?php echo $farr["av_id"]; ?>" <?php if($farr["av_id"]==$selected_id) echo " SELECTED "?>><?php echo $farr["av_name"].", ".$farr["strength"]." ".wins_cases($farr["strength"]);?></option>
   <?php 
     }
   ?>
@@ -15,22 +15,40 @@ function show_avatars_list($av_id) {
  }
 
 //вывод данных по пользователю
-function show_avatar_desc($av_id) {
+function show_avatar_desc($av_id, $self = true) {
    
   if($arr = get_avatar_desc($av_id)[0]) {
-    echo "<div style=\"font-size: 200%; color: red\">".$arr['av_name'].", ".$arr["strength"]." ".wins_cases($arr["strength"]).", ".$arr["sign_alter_name"]."<br/>";
-    echo "<IMG SRC=\"img/sakura_$av_id.jpg\" width=\"250\" height=\"500\">";
+    if ($self) {
     ?>
-    <FORM class="logout" ACTION="<?php echo current_page(); ?>" METHOD="POST">
-     <input type="hidden" name="action" value="logout">
-     <input value="Exit" type="submit">
-    </FORM>
-    <FORM class="change_pin" ACTION="<?php echo current_page(); ?>" METHOD="POST">
+    <div style="font-size: 200%; color: green">Я -
+    <?php
+    }
+    else{
+    ?>
+    <div style="font-size: 100%; color: red">Благородный собеседник - 
+    <?php
+    }
+    ?>
+      <?php echo $arr['av_name'];?> , <?php echo $arr["strength"]." ".wins_cases($arr["strength"]);?> <BR/>
+      <?php echo $arr["sign_alter_name"];?>, <?php echo $arr["sign_name"];?> <BR/>
+      <A HREF="img/sakura_<?php echo $av_id;?>.jpg"><IMG SRC="img/sakura_<?php echo $av_id;?>.jpg" width="125" height="250"></A>
+
+    <?php
+    if ($self) {
+    ?>
+      <FORM class="logout" ACTION="<?php echo current_page(); ?>" METHOD="POST">
+         <input type="hidden" name="action" value="logout">
+         <input value="Exit" type="submit">
+      </FORM>
+    <!--FORM class="change_pin" ACTION="<?php echo current_page(); ?>" METHOD="POST">
      <input type="hidden" name="form" value="change_pin">
      <input value="Change password" type="submit">
-    </FORM>
+    </FORM-->
+    <?php
+    }
+    ?>
+    </div>
     <?php    
-    echo "</div>";
   }
 }//show_avatar_desc
 
@@ -69,6 +87,13 @@ function show_messages_list($oper_av_id) {
   }
 }
 
+
+function show_checkbox($name) {
+?>  
+  <INPUT NAME="<?php echo $name;?>" TYPE="checkbox" value="1">
+<?php
+}
+
 function page_start($version) {
   if(!headers_sent()) push_headers();
   echo '<head><link rel="stylesheet" type="text/css" href="main.css"><title>Janken</title><!--version>'.$version.'</version--></head><body class="margin_auto">';
@@ -96,7 +121,7 @@ function form_start($formname, $av_id) {
 
  function show_textarea() {
    ?>
-    <TEXTAREA NAME="bigtext" COLS="20" ROWS="5"></TEXTAREA NAME="bigtext">
+    <TEXTAREA NAME="bigtext" COLS="20" ROWS="2"></TEXTAREA NAME="bigtext">
    <?php
  }
 

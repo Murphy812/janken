@@ -4,15 +4,25 @@
  //сообщение нужно вставить в табличку
  //у предмета нужно поменять привязку
  function send($av_id, $rcv_id, $items, $msg, $sign) {
-   //просто создаем новое сообщение
-   if (isset($msg)&&$msg!="")
-     $res = make_query("INSERT INTO messages (msg_text, opdate, my_av_id, his_av_id) VALUES ('$msg', now(), $av_id, $rcv_id)");
+   
+   show_avatar_desc($rcv_id, false);
 
-   //для каждого передаваемого предмета - убиваем старую связь, создаем новую
-   foreach($items as $item) {
-     $res = make_query("update item_avatar_history set end_date=now(), op_av_id=$av_id, op_date=now() where it_it_id=$item and av_av_id=$av_id");
-     $res = make_query("insert into item_avatar_history (it_it_id, av_av_id, start_date, op_av_id, op_date) values ($item, $rcv_id, now(), $av_id, now())");
+   //просто создаем новое сообщение
+   if (isset($msg)&&$msg!="") {
+     $res = make_query("INSERT INTO messages (msg_text, opdate, my_av_id, his_av_id) VALUES ('$msg', now(), $av_id, $rcv_id)");
+     echo "получил послание<BR/>";
    }
+
+   if(count($items)>0) {
+     //для каждого передаваемого предмета - убиваем старую связь, создаем новую
+     foreach($items as $item) {
+       $res = make_query("update item_avatar_history set end_date=now(), op_av_id=$av_id, op_date=now() where it_it_id=$item and av_av_id=$av_id");
+       $res = make_query("insert into item_avatar_history (it_it_id, av_av_id, start_date, op_av_id, op_date) values ($item, $rcv_id, now(), $av_id, now())");
+     }
+     echo "получил дары<BR/>";
+   }
+
+
 
    //для переданного знака нужно сделать много всего, если это не -1, который "не драться"
    if (isset($sign)&&$sign!=-1) {
@@ -25,9 +35,9 @@
        //echo "С этим противником ведется бой №$btl_id, продолжаем";
      }
      else {//проверяем, можно ли создавать бой, и если да, то да
-       //проверяем количество нападений на этого наге. Если больше одного боя, то нет!
+       //проверяем количество нападений на этого наге. Если уже было 3 боя, то нельзя
        if(2<val_from_query("select count(*) as c1 from battles b where b.uke_id=$rcv_id and b.nage_id=$av_id"))
-         echo "Противник отказывается принять бой";
+         echo "отказывается принять бой<BR/>";
        else {
          $btl_id = val_from_query("select ifnull(max(btl_id)+1, 1) from battles");
          //echo "с этим противником нет актуального боя, надо начать бой№$btl_id";
@@ -42,6 +52,7 @@
      }
      //тут бой уже точно есть - или нашли, или создали. Надо генерить знак противника, считать результат и тд.
      $nage_sign = get_nage_sign($btl_id, $rcv_id);
+     echo "отвечает на ваш удар!<BR/>";
      $res = make_query("INSERT INTO attacks (bt_bt_id, av1_sign_id, av2_sign_id, op_av_id, op_date) VALUES ($btl_id, $sign, $nage_sign, $av_id, now())");
 
      $sign_lib = get_signs_list();
@@ -84,6 +95,7 @@
         if($uke_health!=0) {
           $winner_id = $av_id;
           echo "<BR/>Победа! Вы кланяетесь противнику и благодарите его за поединок";
+          $res = make_query("UPDATE avatars set strength=strength+1 where av_id=$av_id");//победу считаем только человеку
         }
         else
           if ($nage_health!=0) {
@@ -93,7 +105,6 @@
           else {
             echo "<BR/>Вы оказались достойны друг друга и не смогли выявить победителя";
           }
-        $res = make_query("UPDATE avatars set strength=strength+1 where av_id=$winner_id");//накручиваем балл победителю
      }
      else {
        echo "<BR/>$msg3<BR/>";

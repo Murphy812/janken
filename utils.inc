@@ -103,7 +103,7 @@
    if ($array = mysql_fetch_assoc($res))
      return array($array["av_id"], $array["av_login"]);
    else
-     say('Такого абонента в базе нет. Вообще', 1); 
+     say('Чужие здесь не ходят', 1); 
  } //find_av
  
  //если пин не соответствует указанному - падаем
