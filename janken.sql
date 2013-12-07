@@ -10,7 +10,14 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
+-- Дамп структуры базы данных janken
+DROP DATABASE IF EXISTS `janken`;
+CREATE DATABASE IF NOT EXISTS `janken` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `janken`;
+
+
 -- Дамп структуры для таблица janken.attacks
+DROP TABLE IF EXISTS `attacks`;
 CREATE TABLE IF NOT EXISTS `attacks` (
   `bt_bt_id` int(11) DEFAULT NULL,
   `av1_sign_id` int(11) DEFAULT NULL,
@@ -27,11 +34,15 @@ INSERT INTO `attacks` (`bt_bt_id`, `av1_sign_id`, `av2_sign_id`, `op_av_id`, `op
 	(2, 1, 3, 2, '2013-12-05 03:41:09'),
 	(3, 2, 3, 2, '2013-12-05 03:42:09'),
 	(4, 2, 5, 2, '2013-12-05 03:42:46'),
-	(2, 2, 3, 2, '2013-12-05 03:43:33');
+	(2, 2, 3, 2, '2013-12-05 03:43:33'),
+	(4, 1, 1, 2, '2013-12-06 02:52:08'),
+	(5, 5, 3, 2, '2013-12-06 02:52:49'),
+	(6, 5, 3, 2, '2013-12-06 02:55:46');
 /*!40000 ALTER TABLE `attacks` ENABLE KEYS */;
 
 
 -- Дамп структуры для таблица janken.avatars
+DROP TABLE IF EXISTS `avatars`;
 CREATE TABLE IF NOT EXISTS `avatars` (
   `av_id` int(11) DEFAULT NULL,
   `av_login` char(50) DEFAULT NULL,
@@ -45,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `avatars` (
 /*!40000 ALTER TABLE `avatars` DISABLE KEYS */;
 INSERT INTO `avatars` (`av_id`, `av_login`, `av_name`, `password_hash`, `sign_sign_id`, `strength`) VALUES
 	(1, 'murphy', 'Мэрфи-кун', '1111', 4, 1),
-	(2, 'adora', 'Адора-кун', '1234', 1, 5),
+	(2, 'adora', 'Адора-кун', '1234', 1, 6),
 	(3, 'push', 'Пушист-кун', '3456', 3, 3),
 	(4, 'player4', 'Сато-кун', '1111', 5, 4),
 	(5, 'player5', 'Судзуки-кун', '1111', 1, 5),
@@ -101,6 +112,7 @@ INSERT INTO `avatars` (`av_id`, `av_login`, `av_name`, `password_hash`, `sign_si
 
 
 -- Дамп структуры для таблица janken.battles
+DROP TABLE IF EXISTS `battles`;
 CREATE TABLE IF NOT EXISTS `battles` (
   `btl_id` int(11) DEFAULT NULL,
   `uke_id` int(11) DEFAULT NULL,
@@ -118,11 +130,14 @@ INSERT INTO `battles` (`btl_id`, `uke_id`, `nage_id`, `uke_health`, `nage_health
 	(1, 2, 50, 1, 0, 2, '2013-12-05 03:06:50', '2013-12-05 03:06:50'),
 	(2, 2, 50, 1, 0, 2, '2013-12-05 03:28:23', '2013-12-05 03:43:33'),
 	(3, 2, 1, 4, 0, 2, '2013-12-05 03:42:09', '2013-12-05 03:42:09'),
-	(4, 2, 1, 3, 1, NULL, '2013-12-05 03:42:46', NULL);
+	(4, 2, 1, 2, 0, 2, '2013-12-05 03:42:46', '2013-12-06 02:52:08'),
+	(5, 2, 50, 0, 3, 50, '2013-12-06 02:52:49', '2013-12-06 02:52:49'),
+	(6, 2, 50, 0, 3, 50, '2013-12-06 02:55:46', '2013-12-06 02:55:46');
 /*!40000 ALTER TABLE `battles` ENABLE KEYS */;
 
 
 -- Дамп структуры для таблица janken.battle_histories
+DROP TABLE IF EXISTS `battle_histories`;
 CREATE TABLE IF NOT EXISTS `battle_histories` (
   `bt_id` int(11) DEFAULT NULL,
   `av1_id` int(11) DEFAULT NULL,
@@ -143,6 +158,7 @@ CREATE TABLE IF NOT EXISTS `battle_histories` (
 
 
 -- Дамп структуры для таблица janken.dialogues
+DROP TABLE IF EXISTS `dialogues`;
 CREATE TABLE IF NOT EXISTS `dialogues` (
   `dlg_id` int(11) DEFAULT NULL,
   `av1_id` int(11) DEFAULT NULL,
@@ -157,6 +173,7 @@ CREATE TABLE IF NOT EXISTS `dialogues` (
 
 
 -- Дамп структуры для таблица janken.items
+DROP TABLE IF EXISTS `items`;
 CREATE TABLE IF NOT EXISTS `items` (
   `it_id` int(11) NOT NULL AUTO_INCREMENT,
   `it_name` char(250) DEFAULT NULL,
@@ -190,6 +207,7 @@ INSERT INTO `items` (`it_id`, `it_name`, `special_feature`) VALUES
 
 
 -- Дамп структуры для таблица janken.item_avatar_history
+DROP TABLE IF EXISTS `item_avatar_history`;
 CREATE TABLE IF NOT EXISTS `item_avatar_history` (
   `it_it_id` int(11) DEFAULT NULL,
   `av_av_id` int(11) DEFAULT NULL,
@@ -205,7 +223,7 @@ INSERT INTO `item_avatar_history` (`it_it_id`, `av_av_id`, `start_date`, `end_da
 	(2, 3, '2013-10-04 00:00:00', NULL, 1, '2013-10-04 00:00:00'),
 	(3, 2, '2013-10-04 00:00:00', NULL, 1, '2013-10-04 00:00:00'),
 	(9, 1, '2013-11-10 00:00:00', NULL, 1, '2013-11-10 00:00:00'),
-	(1, 2, '2013-11-10 00:00:00', NULL, 1, '2013-11-10 00:00:00'),
+	(1, 2, '2013-11-10 00:00:00', '2013-12-06 02:45:35', 2, '2013-12-06 02:45:35'),
 	(5, 1, '2013-11-10 00:00:00', '2013-11-10 00:00:00', 1, '2013-11-10 00:00:00'),
 	(6, 1, '2013-11-10 00:00:00', '2013-11-10 00:00:00', 1, '2013-11-10 00:00:00'),
 	(5, 2, '2013-11-10 00:00:00', NULL, 1, '2013-11-10 00:00:00'),
@@ -222,11 +240,14 @@ INSERT INTO `item_avatar_history` (`it_it_id`, `av_av_id`, `start_date`, `end_da
 	(16, 50, '2013-12-05 03:10:25', NULL, 1, '2013-12-05 03:10:25'),
 	(17, 50, '2013-12-05 03:10:25', NULL, 1, '2013-12-05 03:10:25'),
 	(18, 50, '2013-12-05 03:10:25', NULL, 1, '2013-12-05 03:10:25'),
-	(19, 50, '2013-12-05 03:10:25', NULL, 1, '2013-12-05 03:10:25');
+	(19, 50, '2013-12-05 03:10:25', NULL, 1, '2013-12-05 03:10:25'),
+	(1, 1, '2013-12-06 02:45:35', '2013-12-06 02:46:24', 1, '2013-12-06 02:46:24'),
+	(1, 2, '2013-12-06 02:46:24', NULL, 1, '2013-12-06 02:46:24');
 /*!40000 ALTER TABLE `item_avatar_history` ENABLE KEYS */;
 
 
 -- Дамп структуры для таблица janken.logs
+DROP TABLE IF EXISTS `logs`;
 CREATE TABLE IF NOT EXISTS `logs` (
   `log_date` char(255) DEFAULT NULL,
   `ip_address` char(255) DEFAULT NULL,
@@ -689,11 +710,64 @@ INSERT INTO `logs` (`log_date`, `ip_address`, `referer`, `proxy`, `query`, `post
 	('1386200528', '::1', 'localhost', '', '', 'Array\n(\n    [action] => send\n    [who] => 1\n    [sign] => 2\n    [bigtext] => Можете начинать умолять о пощаде, Окава-кун!\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
 	('1386200565', '::1', 'localhost', '', '', 'Array\n(\n    [action] => send\n    [who] => 1\n    [sign] => 2\n    [bigtext] => Можете начинать умолять о пощаде, Окава-кун!\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
 	('1386200612', '::1', 'localhost', '', '', 'Array\n(\n    [action] => send\n    [who] => 50\n    [sign] => 2\n    [bigtext] => \n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
-	('1386200777', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL);
+	('1386200777', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386273452', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386273483', '::1', 'localhost', '', '', 'Array\n(\n    [av_login] => adora\n    [av_pin] => 1234\n)\n', 'Array\n(\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386273484', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386274445', '192.168.1.44', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n)\n', NULL),
+	('1386274503', '192.168.1.44', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n)\n', NULL),
+	('1386274515', '192.168.1.46', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n)\n', NULL),
+	('1386274534', '192.168.1.46', 'localhost', '', '', 'Array\n(\n    [av_login] => adora\n    [av_pin] => 1234\n)\n', 'Array\n(\n)\n', NULL),
+	('1386274535', '192.168.1.46', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n)\n', NULL),
+	('1386274688', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386274713', '192.168.1.46', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n)\n', NULL),
+	('1386274878', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386274890', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386275384', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386275390', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386275448', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386277991', '192.168.1.44', 'localhost', '', '', 'Array\n(\n    [av_login] => pushist\n    [av_pin] => 1234\n)\n', 'Array\n(\n)\n', NULL),
+	('1386278078', '192.168.1.44', 'localhost', '', '', 'Array\n(\n    [av_login] => pushist\n    [av_pin] => 1234\n)\n', 'Array\n(\n)\n', NULL),
+	('1386278092', '192.168.1.44', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n)\n', NULL),
+	('1386278097', '192.168.1.44', 'localhost', '', '', 'Array\n(\n    [av_login] => push\n    [av_pin] => 3456\n)\n', 'Array\n(\n)\n', NULL),
+	('1386278098', '192.168.1.44', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 3\n    [av_key] => 35d4d405c8d44c65a33dbeeb16b99143143ea932\n)\n', NULL),
+	('1386279893', '192.168.1.44', 'localhost', '', '', 'Array\n(\n    [action] => logout\n)\n', 'Array\n(\n    [av_id] => 3\n    [av_key] => 35d4d405c8d44c65a33dbeeb16b99143143ea932\n)\n', NULL),
+	('1386279894', '192.168.1.44', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_key] => 35d4d405c8d44c65a33dbeeb16b99143143ea932\n)\n', NULL),
+	('1386279898', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386281647', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386281654', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386281669', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386282201', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386282690', '::1', 'localhost', '', '', 'Array\n(\n    [action] => send\n    [who] => 1\n    [sign] => -1\n    [bigtext] => \n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386282754', '::1', 'localhost', '', '', 'Array\n(\n    [action] => send\n    [who] => 1\n    [sign] => -1\n    [bigtext] => \n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386283492', '::1', 'localhost', '', '', 'Array\n(\n    [action] => send\n    [who] => 1\n    [sign] => -1\n    [bigtext] => \n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386283534', '::1', 'localhost', '', '', 'Array\n(\n    [action] => send\n    [who] => 1\n    [sign] => -1\n    [items] => Array\n        (\n            [0] => 1\n        )\n\n    [bigtext] => привет тебе, Мэрфи-кун\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386283549', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386283560', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n)\n', NULL),
+	('1386283567', '::1', 'localhost', '', '', 'Array\n(\n    [av_login] => murphy\n    [av_pin] => 1111\n)\n', 'Array\n(\n)\n', NULL),
+	('1386283568', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 1\n    [av_key] => 69db186a91f14835879f9b1aef476a888cabdc44\n)\n', NULL),
+	('1386283583', '::1', 'localhost', '', '', 'Array\n(\n    [action] => send\n    [who] => 2\n    [sign] => -1\n    [items] => Array\n        (\n            [0] => 1\n        )\n\n    [bigtext] => \n)\n', 'Array\n(\n    [av_id] => 1\n    [av_key] => 69db186a91f14835879f9b1aef476a888cabdc44\n)\n', NULL),
+	('1386283657', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 1\n    [av_key] => 69db186a91f14835879f9b1aef476a888cabdc44\n)\n', NULL),
+	('1386283750', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 1\n    [av_key] => 69db186a91f14835879f9b1aef476a888cabdc44\n)\n', NULL),
+	('1386283823', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386283927', '::1', 'localhost', '', '', 'Array\n(\n    [action] => send\n    [who] => 1\n    [sign] => 1\n    [bigtext] => Ати!\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386283968', '::1', 'localhost', '', '', 'Array\n(\n    [action] => send\n    [who] => 50\n    [sign] => 5\n    [bigtext] => \n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386284145', '::1', 'localhost', '', '', 'Array\n(\n    [action] => send\n    [who] => 50\n    [sign] => 5\n    [bigtext] => \n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386284302', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386284322', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386284374', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386284470', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386284490', '::1', 'localhost', '', '', 'Array\n(\n    [action] => send\n    [who] => 1\n    [sign] => -1\n    [bigtext] => я выбираю тебя, покемон!\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386284506', '::1', 'localhost', '', '', 'Array\n(\n    [action] => send\n    [who] => 3\n    [sign] => -1\n    [bigtext] => Пушист, выздоравливай\n)\n', 'Array\n(\n    [av_id] => 2\n    [av_key] => ab03066900ba4c26f5b3e9e99a028ba3b8e380fd\n    [jetbrains_charisma_main_security_PRINCIPAL] => NDgxMzQ5NGQxMzdlMTYzMWJiYTMwMWQ1YWNhYjZlN2JiN2FhNzRjZTExODVkNDU2NTY1ZWY1MWQ3Mzc2NzdiMjpyb290\n)\n', NULL),
+	('1386372037', '::1', 'localhost', '', '', 'Array\n(\n    [action] => logout\n)\n', 'Array\n(\n    [av_id] => 1\n    [av_key] => 69db186a91f14835879f9b1aef476a888cabdc44\n)\n', NULL),
+	('1386372038', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_key] => 69db186a91f14835879f9b1aef476a888cabdc44\n)\n', NULL),
+	('1386372057', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_key] => 69db186a91f14835879f9b1aef476a888cabdc44\n)\n', NULL),
+	('1386372112', '::1', 'localhost', '', '', 'Array\n(\n)\n', 'Array\n(\n    [av_key] => 69db186a91f14835879f9b1aef476a888cabdc44\n)\n', NULL);
 /*!40000 ALTER TABLE `logs` ENABLE KEYS */;
 
 
 -- Дамп структуры для таблица janken.messages
+DROP TABLE IF EXISTS `messages`;
 CREATE TABLE IF NOT EXISTS `messages` (
   `msg_id` int(11) DEFAULT NULL,
   `dlg_dlg_id` int(11) DEFAULT NULL,
@@ -716,11 +790,16 @@ INSERT INTO `messages` (`msg_id`, `dlg_dlg_id`, `msg_text`, `op_av_id`, `opdate`
 	(NULL, NULL, 'тум-тудум', NULL, '2013-11-28 00:00:00', 1, 1),
 	(NULL, NULL, 'Иду на вы!', NULL, '2013-12-05 03:06:50', 2, 50),
 	(NULL, NULL, 'Можете начинать умолять о пощаде, Окава-кун!', NULL, '2013-12-05 03:42:09', 2, 1),
-	(NULL, NULL, 'Можете начинать умолять о пощаде, Окава-кун!', NULL, '2013-12-05 03:42:46', 2, 1);
+	(NULL, NULL, 'Можете начинать умолять о пощаде, Окава-кун!', NULL, '2013-12-05 03:42:46', 2, 1),
+	(NULL, NULL, 'привет тебе, Мэрфи-кун', NULL, '2013-12-06 02:45:35', 2, 1),
+	(NULL, NULL, 'Ати!', NULL, '2013-12-06 02:52:08', 2, 1),
+	(NULL, NULL, 'я выбираю тебя, покемон!', NULL, '2013-12-06 03:01:31', 2, 1),
+	(NULL, NULL, 'Пушист, выздоравливай', NULL, '2013-12-06 03:01:47', 2, 3);
 /*!40000 ALTER TABLE `messages` ENABLE KEYS */;
 
 
 -- Дамп структуры для таблица janken.signs
+DROP TABLE IF EXISTS `signs`;
 CREATE TABLE IF NOT EXISTS `signs` (
   `sign_id` int(11) DEFAULT NULL,
   `sign_name` char(20) DEFAULT NULL,
@@ -732,13 +811,14 @@ CREATE TABLE IF NOT EXISTS `signs` (
 INSERT INTO `signs` (`sign_id`, `sign_name`, `sign_alter_name`) VALUES
 	(1, 'Огонь', 'Короли'),
 	(2, 'Металл', 'Хулиганы'),
-	(3, 'Дерево', 'Ботаны'),
-	(4, 'Земля', 'Шуты'),
-	(5, 'Вода', 'Изгои');
+	(3, 'Дерево', 'Интеллектуалы'),
+	(4, 'Земля', 'Тролли'),
+	(5, 'Вода', 'Белые вороны');
 /*!40000 ALTER TABLE `signs` ENABLE KEYS */;
 
 
 -- Дамп структуры для таблица janken.stakes
+DROP TABLE IF EXISTS `stakes`;
 CREATE TABLE IF NOT EXISTS `stakes` (
   `bt_bt_id` int(11) DEFAULT NULL,
   `it_id_id` int(11) DEFAULT NULL,

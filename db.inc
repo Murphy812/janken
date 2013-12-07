@@ -5,7 +5,7 @@
      global $link;
      require 'config.inc';
 		$link = mysql_connect($db_server, $db_user, $db_password);
-     mysql_select_db('janken', $link);
+     mysql_select_db($db_config, $link);
      mysql_query("SET NAMES 'utf8'");
      return $link;
   }
@@ -16,9 +16,7 @@
     if (!isset($link)) {
         $link = make_link();
     }
-    
     $result = mysql_query($query, $link);//$query
-	
     return $result;
  }
 
@@ -41,7 +39,8 @@
 
  //первое значение из запроса
  function val_from_query($query) {
-    return array_from_query($query)[0][0];
+    $res = array_from_query($query);
+    return $res[0][0];
  }
 
  

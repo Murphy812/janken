@@ -93,32 +93,27 @@
 
 //если указанный абонент в базе отсутствует - падаем
  function find_av ($cav_login) {
-   $query = " SELECT a.av_id, a.sign_sign_id FROM avatars a WHERE  a.av_login='$cav_login'";
-   
-   $res = make_query($query);
-      if (!$res)
-   {
+   $res = make_query("SELECT a.av_id, a.av_login FROM avatars a WHERE  a.av_login='$cav_login'");
+   if (!$res) {
     echo mysql_error();die();
    }
    if ($array = mysql_fetch_assoc($res))
      return array($array["av_id"], $array["av_login"]);
-   else
-     say('Чужие здесь не ходят', 1); 
+   else {
+     say('Чужие здесь не ходят', 1);     
+   }
  } //find_av
  
  //если пин не соответствует указанному - падаем
  function check_av_pin ($cav_id, $cav_pass) {
    if(!isset($cav_id)||!isset($cav_pass))
      say("bad params", 1);
-   $query = "SELECT a.password_hash FROM avatars a WHERE a.av_id=$cav_id"; 
-   echo "$query<BR/>\n";
-   $res = make_query($query);
+   $res = make_query("SELECT a.password_hash FROM avatars a WHERE a.av_id=$cav_id");
    $array = mysql_fetch_assoc($res);
-   print_r($array);
    if ($array["password_hash"] == $cav_pass)
      return 1;
    else
-     //sleep(rand(5,10));
+     sleep(rand(3,10));
      say('Пин указан некорректно', 1); 
      //say('Пин указан некорректно '.$cav_id.', '.$cav_pass.' '.$array["password_hash"], 1); 
 
@@ -154,11 +149,12 @@
 	   ?>
 <H3>Добро пожаловать в проект Дзянкэн!</H3>
 <FORM ACTION="<?php echo current_page(); ?>" METHOD="POST">
-   Введите свой логин:<BR/>
-   <INPUT NAME="av_login" TYPE="TEXT" VALUE=""><BR/>
-   Введите свой пин:<BR/>
-   <INPUT NAME="av_pin" TYPE="PASSWORD" VALUE="" SIZE=4 MAXLENGTH=4><BR/>
-   <INPUT TYPE="SUBMIT" VALUE="Войти">
+   Выберите персонажа:<BR/>
+   <?php show_avatars_list4login(); ?>
+   <!--INPUT NAME="av_login" TYPE="TEXT" VALUE=""--><BR/>
+   Введите пин:<BR/>
+   <INPUT NAME="av_pin" TYPE="PASSWORD" VALUE="" SIZE=4><BR/>
+   <INPUT TYPE="SUBMIT" VALUE="Войти" class="orange">
  </FORM>
       <?php
        die();

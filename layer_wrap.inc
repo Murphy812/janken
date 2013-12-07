@@ -1,12 +1,30 @@
 <?php 
 
-function show_avatars_list($av_id, $selected_id) {
+function show_avatars_list($av_id, $selected_id, $name="who") {
   ?> 
- <SELECT NAME="who">
+ <SELECT NAME="<?php echo $name; ?>">
   <?php 
     foreach(get_avatars_list($av_id) as $farr) {
   ?>
-    <option value="<?php echo $farr["av_id"]; ?>" <?php if($farr["av_id"]==$selected_id) echo " SELECTED "?>><?php echo $farr["av_name"].", ".$farr["strength"]." ".wins_cases($farr["strength"]);?></option>
+    <option value="<?php echo $farr["av_id"]; ?>" <?php if($farr["av_id"]==$selected_id) echo "SELECTED"?>>
+      <?php echo $farr["av_name"].", ".$farr["wins"]." ".wins_cases($farr["wins"]); ?>
+    </option>
+  <?php 
+    }
+  ?>
+ </SELECT>
+ <?php 
+ }
+
+function show_avatars_list4login() {
+  ?> 
+ <SELECT NAME="av_login">
+  <?php 
+    foreach(get_avatars_list(-1000) as $farr) {
+  ?>
+    <option value="<?php echo $farr["av_login"]; ?>">
+      <?php echo $farr["av_login"]; ?>
+    </option>
   <?php 
     }
   ?>
@@ -16,35 +34,40 @@ function show_avatars_list($av_id, $selected_id) {
 
 //вывод данных по пользователю
 function show_avatar_desc($av_id, $self = true) {
-   
-  if($arr = get_avatar_desc($av_id)[0]) {
+  $res = get_avatar_desc($av_id);
+
+  if(isset($res[0]) && $arr = $res[0]) {
     if ($self) {
     ?>
-    <div style="font-size: 200%; color: green">Я -
+    <div style="font-size: 150%; color: green">Я -
     <?php
     }
     else{
     ?>
-    <div style="font-size: 100%; color: red">Благородный собеседник - 
+    <div style="font-size: 100%; color: red">Противник - 
     <?php
     }
     ?>
-      <?php echo $arr['av_name'];?> , <?php echo $arr["strength"]." ".wins_cases($arr["strength"]);?> <BR/>
+      <?php echo $arr['av_name'];?> , <?php echo $arr["wins"]." ".wins_cases($arr["wins"]);?> <BR/>
       <?php echo $arr["sign_alter_name"];?>, <?php echo $arr["sign_name"];?> <BR/>
+      <?php echo $arr["description"];?><BR/>
       <A HREF="img/sakura_<?php echo $av_id;?>.jpg"><IMG SRC="img/sakura_<?php echo $av_id;?>.jpg" width="125" height="250"></A>
-
     <?php
+    echo "<BR/>Бонусные предметы: ".enlist_items($av_id, $av_id);
     if ($self) {
+      show_joker_form($av_id, $arr["sign_id"]);
+
     ?>
       <FORM class="logout" ACTION="<?php echo current_page(); ?>" METHOD="POST">
          <input type="hidden" name="action" value="logout">
-         <input value="Exit" type="submit">
+         <input value="Exit" type="submit" class="blue">
       </FORM>
     <!--FORM class="change_pin" ACTION="<?php echo current_page(); ?>" METHOD="POST">
      <input type="hidden" name="form" value="change_pin">
      <input value="Change password" type="submit">
     </FORM-->
     <?php
+    } else {
     }
     ?>
     </div>
@@ -78,13 +101,41 @@ function show_items_list($oper_av_id, $owner_av_id) {
 }//show_items_list
 
 
+function enlist_items($oper_av_id, $owner_av_id) {
+  $res = "";
+  foreach(get_items_list($oper_av_id, $owner_av_id) as $farr) {
+    $res.=" | '".$farr["it_name"]."'";
+  }
+  return substr($res, 3);
+}//show_items_list
+
+
+
 function show_messages_list($oper_av_id) {
   foreach(get_messages_list($oper_av_id) as $farr) {
   ?>
-    <div style="color: <?php echo ($farr["frm"]=='me')?"green": "red"; ?>"><?php echo $farr["opdate"]." ".($farr["frm"]=='me'?"слушал:": "говорил:")." ".$farr["av_name"].": ".$farr["msg_text"];?></div>
-
+    <div style="color: <?php echo ($farr["frm"]=='me')?"green": "red"; ?>"><?php echo $farr["opdate"]." ".$farr["av_name"]." ".($farr["frm"]=='me'?"услышал от нас": "сказал нам").": ".$farr["msg_text"];?></div>
   <?php 
   }
+}
+
+function show_jokes_list() {
+  echo "<UL>";
+  foreach(get_jokes_list() as $farr) {
+  ?>
+    <LI style="color: blue"><?php echo $farr["opdate"]." ".$farr["av_name"]." рассказал всем: ".$farr["msg_text"];?></LI>
+  <?php 
+  }
+  echo "</UL>";
+}
+
+
+function show_joker_form($av_id, $av_sign_id) {
+  if($av_sign_id!=4)
+    return;
+  form_start("joke_comment", $av_id);
+  show_textarea();
+  form_end("Рассказать всем");
 }
 
 
@@ -96,7 +147,7 @@ function show_checkbox($name) {
 
 function page_start($version) {
   if(!headers_sent()) push_headers();
-  echo '<head><link rel="stylesheet" type="text/css" href="main.css"><title>Janken</title><!--version>'.$version.'</version--></head><body class="margin_auto">';
+  echo '<head><link rel="stylesheet" type="text/css" href="main.css"><title>Janken</title><!--version>$version</version--></head><body class="margin_auto">';
 }
 
 function page_end() {
@@ -111,17 +162,17 @@ function form_start($formname, $av_id) {
    <?php
  }
 
- function form_end($formname) {
+ function form_end($buttonname) {
    ?>
 
-    <br/><INPUT TYPE="SUBMIT" VALUE="<?php echo $formname; ?>">
+    <br/><INPUT TYPE="SUBMIT" VALUE="<?php echo $buttonname; ?>" class="green">
   </FORM>
    <?php
  }
 
- function show_textarea() {
+ function show_textarea($label) {
    ?>
-    <TEXTAREA NAME="bigtext" COLS="20" ROWS="2"></TEXTAREA NAME="bigtext">
+    <TEXTAREA id="bigtext" COLS="20" ROWS="4" placeholder="<?php echo $label;?>"></TEXTAREA>
    <?php
  }
 
@@ -151,5 +202,6 @@ function form_start($formname, $av_id) {
    return $hits_cases[cases($num)];
  }
 
+ 
   
 ?>

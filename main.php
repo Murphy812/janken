@@ -13,7 +13,7 @@
 
  include_once("layer_db.inc");
  include_once("layer_wrap.inc");
- 
+
  include_once("pin.inc");			// смена PIN
  include_once("send.inc");
  include_once("battle.inc");		// битва
@@ -23,7 +23,7 @@
  $version = "2013104.1";
  
  $varr = log_call(); 
-    
+
  $av_id = get_master_av();
 
    //если задано действие - вначале выполняем его
@@ -42,6 +42,9 @@
        $sign = (isset($_POST["sign"])?$_POST["sign"]:-1);
        send($av_id,$who,$items,$msg, $sign);
        break;    
+     case "joke_comment":
+       post_joke($_POST["bigtext"], $av_id);
+       break;
    }  
 
    //если задано подтверждение - запрашиваем его
@@ -66,28 +69,33 @@
 
    //тут нужен заголовок формы отправки. стандартные поля про оператора. Потом список предметов, которые можно чекнуть, и поле для ввода сообщения
    form_start("send", $av_id);
-     echo "<BR/>Выберите благородного соученика<BR/>";
+     echo "<H3>Выберите противника</H3>";
      $rvc_id;
      show_avatars_list($av_id, isset($who)?$who:$av_id);
 
-     echo " чтобы<br/>";
+     echo "<H6>для атаки:</H6>";
      show_signs_list();
-  
-     echo "<br/><br/>и вручить ему дар:<br/>";
+
+/*  
+     echo "<H6>и вручить ему дар:</H6>";
      show_items_list($av_id, $av_id);
 
-     echo "<br/><br/>а также отправить послание:<br/>";
+     echo "<H6>а также отправить послание:</H6>";
      show_textarea();
+*/
+//     show_textarea("а также отправить послание:");
 
    //окончание формы отправки
-   form_end("send");
+   form_end("Fight!");
 
+
+   echo "<H6>Сообщения:</H6>";
+   show_messages_list($av_id);
+   show_jokes_list();
 
    //всегда безусловно(?может быть, краткая и полная форма?) выводим данные оператора
    show_avatar_desc($av_id);
 
-   echo "Сообщения:<br/>";
-   show_messages_list($av_id);
 
    //print_r($_GET);
    //print_r($_POST);
@@ -99,6 +107,14 @@
    page_end();
    to_main_page(0);
  } 
+
+ ?>
+<!DOCTYPE html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="js/kickstart.js"></script> <!-- KICKSTART -->
+<link rel="stylesheet" href="css/kickstart.css" media="all" /> <!-- KICKSTART -->
+
+ <?php
 
  main();
 ?>

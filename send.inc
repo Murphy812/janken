@@ -8,10 +8,9 @@
    show_avatar_desc($rcv_id, false);
 
    //просто создаем новое сообщение
-   if (isset($msg)&&$msg!="") {
-     $res = make_query("INSERT INTO messages (msg_text, opdate, my_av_id, his_av_id) VALUES ('$msg', now(), $av_id, $rcv_id)");
+   
+   if (make_msg($msg, $av_id, $rcv_id))
      echo "получил послание<BR/>";
-   }
 
    if(count($items)>0) {
      //для каждого передаваемого предмета - убиваем старую связь, создаем новую
@@ -36,7 +35,7 @@
      }
      else {//проверяем, можно ли создавать бой, и если да, то да
        //проверяем количество нападений на этого наге. Если уже было 3 боя, то нельзя
-       if(2<val_from_query("select count(*) as c1 from battles b where b.uke_id=$rcv_id and b.nage_id=$av_id"))
+       if(200<val_from_query("select count(*) as c1 from battles b where b.uke_id=$rcv_id and b.nage_id=$av_id"))
          echo "отказывается принять бой<BR/>";
        else {
          $btl_id = val_from_query("select ifnull(max(btl_id)+1, 1) from battles");
@@ -95,7 +94,7 @@
         if($uke_health!=0) {
           $winner_id = $av_id;
           echo "<BR/>Победа! Вы кланяетесь противнику и благодарите его за поединок";
-          $res = make_query("UPDATE avatars set strength=strength+1 where av_id=$av_id");//победу считаем только человеку
+          $res = make_query("UPDATE avatars set wins=wins+1 where av_id=$av_id");//победу считаем только человеку
         }
         else
           if ($nage_health!=0) {
@@ -149,8 +148,8 @@
  }
   
  function get_nage_sign($btl_id, $nage_id) {
-   if($nage_id==50) //это хак для отладки - нападаем на толстое дерево
-     return 3;
+   if($nage_id==1) //это хак для отладки - нападаем на толстое дерево
+     return 1;
    else
      return rand(1, 1000) % 5 +1;//пока так, а потом если что добавим подлой логики
  }
