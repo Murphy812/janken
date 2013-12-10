@@ -95,6 +95,14 @@
           $winner_id = $av_id;
           echo "<BR/>Победа! Вы кланяетесь противнику и благодарите его за поединок";
           $res = make_query("UPDATE avatars set wins=wins+1 where av_id=$av_id");//победу считаем только человеку
+
+          //если корень из числа побед больше, чем количество вещей-2, то даем еще блинчик
+          if(round(sqrt(val_from_query("select wins from avatars where av_id=$av_id"))) >  count(get_items_list($av_id, $av_id)) -2) {
+            $new_item = make_new_item("блинчик");
+            give_item($new_item, $av_id);
+            echo "<BR/>И Вы получаете блинчик в подарок! Он укрепит ваши силы в будущих боях!";
+          }
+          
         }
         else
           if ($nage_health!=0) {

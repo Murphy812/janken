@@ -202,6 +202,17 @@ function form_start($formname, $av_id) {
    return $hits_cases[cases($num)];
  }
 
+
+function make_new_item($item_name) {
+  $n_id = val_from_query("select ifnull(max(it_id)+1, 1) from items");
+  make_query("insert into items (it_id, it_name) values ($n_id, '$item_name')");
+  return $n_id;
+}
+
+
+function give_item($n_item_id, $av_id) {
+  make_query("insert into item_avatar_history values ($n_item_id,$av_id, now(), null, $av_id, now())");
+}
  
   
 ?>
